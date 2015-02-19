@@ -1,10 +1,10 @@
 
 package net.evilmonkeylabs.yape
 
-import org.pegdown.PegDownProcessor
+import org.pegdown.{Extensions, PegDownProcessor}
 
 object MarkdownParser extends App {
-  val parser = new PegDownProcessor
+  val parser = new PegDownProcessor(Extensions.FENCED_CODE_BLOCKS | Extensions.SMARTYPANTS)
   val file = try {
 
     args(0)

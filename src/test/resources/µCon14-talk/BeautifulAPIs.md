@@ -71,7 +71,7 @@ bmcadams@netflix.com
 ---
 #[fit] Choose a good service model
 
-![left fit](images/majorKong.jpg)
+![left fit autoplay](images/majorKong.mov)
 
 * Choose a service model that's easy to interact with (and develop)
 * The same goes for your data layer, and development framework
@@ -224,6 +224,7 @@ bmcadams@netflix.com
 ![right](images/bladerunner-V-K-cropped.png)
 
 ---
+
 #[fit] One Test, Two Test, 
 #[fit] Red Test, Blue Test...
 
@@ -231,10 +232,8 @@ bmcadams@netflix.com
 
 ---
 
-## "Never Trust A Test
-##   You Haven't Seen
-##   Fail." 
-### - Rob Fletcher ( @rfletcherEW ) 
+> "Never Trust A Test You Haven't Seen Fail."
+-- Rob Fletcher ( @rfletcherEW )
 ####[fit] ... who says he nicked it from @tddmonkey (Colin Vipurs)
 
 ![left](images/fletcher.jpeg)
@@ -244,5 +243,35 @@ bmcadams@netflix.com
 ### [fit] Questions?
 
 ![original](images/Dr-Strangelove-George-C.Scott_.jpg)
+
+---
+
+```scala
+package net.evilmonkeylabs.yape
+
+import org.pegdown.PegDownProcessor
+
+object MarkdownParser extends App {
+  val parser = new PegDownProcessor
+  val file = try {
+
+    args(0)
+  } catch {
+    case t: Throwable =>
+      throw new Exception("You must specify a file to parse", t)
+  }
+  val source = scala.io.Source.fromFile(file)
+  val lines = source.mkString
+  source.close()
+  val slides = lines.split("\n---")
+  println(s"# of slides: ${slides.length}")
+
+  for (slide <- slides) {
+    println(parser.markdownToHtml(slide))
+    println("***********************************")
+  }
+}
+```
+
 
 
