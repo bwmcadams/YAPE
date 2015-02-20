@@ -4,7 +4,8 @@ package net.evilmonkeylabs.yape
 import org.pegdown.{Extensions, PegDownProcessor}
 
 object MarkdownParser extends App {
-  val parser = new PegDownProcessor(Extensions.FENCED_CODE_BLOCKS | Extensions.SMARTYPANTS)
+  val parser = new PegDownProcessor(Extensions.FENCED_CODE_BLOCKS | Extensions.SMARTYPANTS | Extensions.STRIKETHROUGH |
+                                    Extensions.HARDWRAPS | Extensions.AUTOLINKS )
   val file = try {
 
     args(0)
