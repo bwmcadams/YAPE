@@ -1,11 +1,11 @@
 
 package net.evilmonkeylabs.yape
 
-import org.pegdown.{LinkRenderer, Extensions, PegDownProcessor}
+import org.pegdown.ast.RootNode
+import org.pegdown.{ParsingTimeoutException, LinkRenderer, Extensions, PegDownProcessor}
+import scala.collection.JavaConversions._
 
 object MarkdownParser extends App {
-  val parser = new PegDownProcessor(Extensions.FENCED_CODE_BLOCKS | Extensions.SMARTYPANTS | Extensions.STRIKETHROUGH |
-                                    Extensions.HARDWRAPS | Extensions.AUTOLINKS )
   val file = try {
 
     args(0)
@@ -20,10 +20,8 @@ object MarkdownParser extends App {
   println(s"# of slides: ${slides.length}")
 
   for (slide <- slides) {
-    println(parser.markdownToHtml(slide))
+    println(SlideHTMLRenderer(slide))
     println("***********************************")
   }
 }
-
-
 
