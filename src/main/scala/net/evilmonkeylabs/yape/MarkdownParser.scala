@@ -1,7 +1,7 @@
 
 package net.evilmonkeylabs.yape
 
-import org.pegdown.{Extensions, PegDownProcessor}
+import org.pegdown.{LinkRenderer, Extensions, PegDownProcessor}
 
 object MarkdownParser extends App {
   val parser = new PegDownProcessor(Extensions.FENCED_CODE_BLOCKS | Extensions.SMARTYPANTS | Extensions.STRIKETHROUGH |
@@ -24,3 +24,6 @@ object MarkdownParser extends App {
     println("***********************************")
   }
 }
+
+
+
