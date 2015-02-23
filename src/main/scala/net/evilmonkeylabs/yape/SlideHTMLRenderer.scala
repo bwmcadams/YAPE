@@ -34,8 +34,9 @@ class SlideHTMLRenderer(_linkRenderer: LinkRenderer = new LinkRenderer,
 }
 
 object SlideHTMLRenderer {
-  val parser = new PegDownProcessor(Extensions.FENCED_CODE_BLOCKS | Extensions.SMARTYPANTS | Extensions.STRIKETHROUGH |
-    Extensions.HARDWRAPS | Extensions.AUTOLINKS)
+  val options = Extensions.FENCED_CODE_BLOCKS | Extensions.SMARTYPANTS | Extensions.STRIKETHROUGH |
+                 Extensions.HARDWRAPS | Extensions.AUTOLINKS
+  val parser = new PegDownProcessor(options)
   def apply(markdown: String) = {
     try {
       val astRoot: RootNode = parser.parseMarkdown(markdown.toArray)
