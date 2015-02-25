@@ -2,7 +2,7 @@
 package net.evilmonkeylabs.yape
 
 import org.pegdown.ast.RootNode
-import org.pegdown.plugins.ToHtmlSerializerPlugin
+import org.pegdown.plugins.{PegDownPlugins, ToHtmlSerializerPlugin}
 import org.pegdown._
 
 import scala.collection.JavaConverters._
@@ -36,13 +36,19 @@ class SlideHTMLRenderer(_linkRenderer: LinkRenderer = new LinkRenderer,
 object SlideHTMLRenderer {
   val options = Extensions.FENCED_CODE_BLOCKS | Extensions.SMARTYPANTS | Extensions.STRIKETHROUGH |
                  Extensions.HARDWRAPS | Extensions.AUTOLINKS
-  val parser = new PegDownProcessor(options)
+  val plugins = new PegDownPlugins.Builder().build()
+  // we need to find this pragma globally and will do so before we parse slides...
+  // basicaslly ,putting footer and slidenumbers as a css element
+  //.withBlockPluginRules(PragmaParser.ShowSlideNumbers).build()
+  val parser = new PegDownProcessor(options, plugins)
   def apply(markdown: String) = {
     try {
       val astRoot: RootNode = parser.parseMarkdown(markdown.toArray)
+      println(astRoot)
       new SlideHTMLRenderer().toHtml(astRoot)
     } catch {
       case e: ParsingTimeoutException =>
+        println("PARSING TIMEOUT")
         null // todo - denull me
     }
 
