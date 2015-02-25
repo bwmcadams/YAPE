@@ -71,11 +71,15 @@ object SlideHTMLRenderer {
       val astRoot: RootNode = parser.parseMarkdown(markdown.toArray)
       val html = new SlideHTMLRenderer().toHtml(astRoot)
       // todo - presenter notes
-      // sloppy post processing for header [fit] as it barfs inside the reflinks nodes
+      // sloppy post processing
+      // header [fit] as it barfs inside the reflinks nodes
       var output = html
       for (n <- 1 to 6) {
         output = hFitReplacer(output, n)
       }
+      // strip out presenter notes until we do something with them
+      val r = "<p>\\^.*?</p>".r
+      output = r.replaceAllIn(output, "")
       output
     } catch {
       case e: ParsingTimeoutException =>
