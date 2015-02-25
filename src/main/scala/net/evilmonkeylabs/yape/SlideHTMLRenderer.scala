@@ -1,7 +1,10 @@
 
 package net.evilmonkeylabs.yape
 
-import org.pegdown.ast.RootNode
+import org.parboiled.Rule
+import org.pegdown.LinkRenderer.Rendering
+import org.pegdown.Parser.ParseRunnerProvider
+import org.pegdown.ast.{RefLinkNode, HeaderNode, RootNode}
 import org.pegdown.plugins.{PegDownPlugins, ToHtmlSerializerPlugin}
 import org.pegdown._
 
@@ -13,11 +16,11 @@ import scala.collection.JavaConversions._
  * and fixes a few other quirks such as stripping out Image ALT tags as contextual rather than mouseover data (
  * fit image, original size, autoplay, etc )
  */
-class SlideHTMLRenderer(_linkRenderer: LinkRenderer = new LinkRenderer,
+class SlideHTMLRenderer(_linkRenderer: LinkRenderer = new YAPELinkRenderer,
                         _verbatimSerializers: Map[String, VerbatimSerializer] =
                           Map(VerbatimSerializer.DEFAULT -> DefaultVerbatimSerializer.INSTANCE),
                         _plugins: List[ToHtmlSerializerPlugin] = List.empty)
-  extends ToHtmlSerializer(_linkRenderer, _verbatimSerializers.asJava, _plugins.asJava) {
+  extends ToHtmlSerializer(new YAPELinkRenderer, _verbatimSerializers.asJava, _plugins.asJava) {
 
   override protected def printImageTag(rendering: LinkRenderer.Rendering) {
     printer.print("<img")
@@ -28,6 +31,12 @@ class SlideHTMLRenderer(_linkRenderer: LinkRenderer = new LinkRenderer,
     printer.print("/>")
   }
 
+
+
+  override def visit(node: HeaderNode) {
+    super.visit(node)
+  }
+
   private def printAttribute(name: String, value: String) {
         printer.print(' ').print(name).print('=').print('"').print(value).print('"')
     }
@@ -36,16 +45,21 @@ class SlideHTMLRenderer(_linkRenderer: LinkRenderer = new LinkRenderer,
 object SlideHTMLRenderer {
   val options = Extensions.FENCED_CODE_BLOCKS | Extensions.SMARTYPANTS | Extensions.STRIKETHROUGH |
                  Extensions.HARDWRAPS | Extensions.AUTOLINKS
-  val plugins = new PegDownPlugins.Builder().build()
+  val plugins = new PegDownPlugins.Builder().withInlinePluginRules(PragmaParser.HeaderFitPragma)
   // we need to find this pragma globally and will do so before we parse slides...
   // basicaslly ,putting footer and slidenumbers as a css element
   //.withBlockPluginRules(PragmaParser.ShowSlideNumbers).build()
-  val parser = new PegDownProcessor(options, plugins)
+  val parser = new PegDownProcessor(Extensions.ALL, plugins.build())
   def apply(markdown: String) = {
     try {
       val astRoot: RootNode = parser.parseMarkdown(markdown.toArray)
-      println(astRoot)
-      new SlideHTMLRenderer().toHtml(astRoot)
+      val html = new SlideHTMLRenderer().toHtml(astRoot)
+      // sloppy post processing for header [fit] as it barfs inside the reflinks nodes
+      var output = html
+      for (n <- 1 to 6) {
+        output = hFitReplacer(output, n)
+      }
+      output
     } catch {
       case e: ParsingTimeoutException =>
         println("PARSING TIMEOUT")
@@ -53,4 +67,13 @@ object SlideHTMLRenderer {
     }
 
   }
+
+  def hFitReplacer(input: String, level: Int) = {
+    input.replace(s"<h$level>[fit]", s"""<h$level class="fit">""")
+  }
+}
+
+class YAPELinkRenderer extends LinkRenderer {
+
+
 }

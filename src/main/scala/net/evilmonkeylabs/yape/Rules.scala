@@ -1,22 +1,32 @@
 package net.evilmonkeylabs.yape
 
+import net.evilmonkeylabs.yape.ast.{FitThisHeaderNode, ShowSlideNumbersNode}
 import org.parboiled.errors.{ErrorUtils, ParsingException}
 import org.pegdown.ast.{Visitor, Node, AbstractNode}
 import scala.collection.JavaConverters._
 import scala.collection.JavaConversions._
 import org.parboiled.scala._
 
+trait Parsing extends Parser {
+  def WhiteSpace = rule { zeroOrMore(anyOf(" \t")) }
 
-object PragmaParser extends Parser {
+  def Newline = rule { oneOrMore(anyOf("\n\r\f")) }
+}
 
+object PragmaParser extends Parsing {
 
   def ShowSlideNumbers = rule { "slidenumbers:" ~ WhiteSpace ~ "true" ~ push(ShowSlideNumbersNode) }
 
-  def WhiteSpace = rule { zeroOrMore(anyOf("\t ")) }
+  def HeaderFitPragma = rule { "\\[fit\\]" ~ push(FitThisHeaderNode) }
 
-  def Newline = rule { oneOrMore(anyOf("\n\r\f")) }
-
-
+  def fitHeader(expression: String) = {
+    val parsingResult = ReportingParseRunner(HeaderFitPragma).run("### [fit]")
+    parsingResult.result match {
+      case Some(showSlides) => showSlides
+      case None => throw new ParsingException("Invalid expression:\n" +
+        ErrorUtils.printParseErrors(parsingResult))
+    }
+  }
   def showSlideNumbers(expression: String) = {
     val parsingResult = ReportingParseRunner(ShowSlideNumbers).run(expression)
     parsingResult.result match {
@@ -27,16 +37,14 @@ object PragmaParser extends Parser {
   }
 }
 
-case object ShowSlideNumbersNode extends AbstractNode {
+object FormulaParser extends Parsing {
+  // NOTE: This should be handled automatically inline by MathJax
 
-  println(s"********* Slide Numbers ENABLED")
-  override def accept(visitor: Visitor) = {
-    println(s"Visited by $visitor")
-    visitor.visit(this: Node)
-  }
+  //def FormulaBlock = rule {
 
-  override def getChildren(): java.util.List[Node] = {
-    null
-  }
+  //def FormulaInline =
 }
+
+
+
 

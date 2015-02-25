@@ -7,7 +7,6 @@ import scala.collection.JavaConversions._
 
 object MarkdownParser extends App {
   val file = try {
-
     args(0)
   } catch {
     case t: Throwable =>
@@ -19,11 +18,10 @@ object MarkdownParser extends App {
   val slides = lines.split("\n---")
   println(s"# of slides: ${slides.length}")
 
-//  val line = slides.head.substring(0, slides.head.indexOf("\n"))
-//  println(PragmaParser.showSlideNumbers(line))
+  //println(PragmaParser.showSlideNumbers(line))
   for (slide <- slides) {
     println(SlideHTMLRenderer(slide))
-    println("***********************************")
+    println("-------------------------------")
   }
 }
 

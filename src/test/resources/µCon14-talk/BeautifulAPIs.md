@@ -273,5 +273,23 @@ object MarkdownParser extends App {
 }
 ```
 
+---
+
+Block Formulas are parseable, and will eventually do pretty rendering via MathJax
+
+$$
+\left( \sum_{k=1}^n a_k b_k \right)^2 \leq \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right)
+$$
+
+I hope to hell that I get them working...
+
+---
+
+Also supportable is inline formulas...
+
+The slope $$a$$ of the line defined by the function $$f(x) = 2x$$ is $$a = 2$$.
+
+
+
 
 
