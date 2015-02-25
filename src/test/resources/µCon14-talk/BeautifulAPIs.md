@@ -29,10 +29,11 @@ bmcadams@netflix.com
 
 ![left ](images/BrilliantPony.png)
 
-* If your code & API are hard to understand internally it's likely the same externally 
-* Is it monolithic and slow moving, or small and nimble?
-* Is it well documented?
-* Do you return well articulated, meaningful errors?
+- Some Questions
+    1. If your code & API are hard to understand internally it's likely the same externally
+    1. Is it monolithic and slow moving, or small and nimble?
+    1. Is it well documented?
+    1. Do you return well articulated, meaningful errors?
 
 ---
 
@@ -66,7 +67,13 @@ bmcadams@netflix.com
 
 * Make sure you can restrict who has access to what resources (authorization / authz)
 
-^ Yes, Virginia, there *is* an important difference between authentication (auth) and authorization (authz)
+* ~~This should strike through~~
+
+* Super<sup>script</sup>
+
+* Sub<sub>script</sub>
+
+^ Yes, Virginia, there *is* an __important__ difference between authentication (auth) and authorization (authz)
 
 ---
 #[fit] Choose a good service model

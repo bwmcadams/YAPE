@@ -22,13 +22,29 @@ class SlideHTMLRenderer(_linkRenderer: LinkRenderer = new YAPELinkRenderer,
                         _plugins: List[ToHtmlSerializerPlugin] = List.empty)
   extends ToHtmlSerializer(new YAPELinkRenderer, _verbatimSerializers.asJava, _plugins.asJava) {
 
+  val ValidVideoExtensions = List("webm", "ogg", "mp4", "mov")
+
   override protected def printImageTag(rendering: LinkRenderer.Rendering) {
-    printer.print("<img")
-    printAttribute("src", rendering.href)
-    printAttribute("class", rendering.text)
-    for (attr: LinkRenderer.Attribute <- rendering.attributes)
-      printAttribute(attr.name, attr.value)
-    printer.print("/>")
+    // TODO - Audio support, but for now we assume a valid video extension (i.e. ogg which can be audio) is video, not audio
+    if (rendering.href.endsWith(".webm") || rendering.href.endsWith(".mov") || rendering.href.endsWith(".mp4") ||
+        rendering.href.endsWith(".mov")) {
+      printer.print("<video")
+      printAttribute("class", rendering.text)
+      for (attr: LinkRenderer.Attribute <- rendering.attributes)
+        printAttribute(attr.name, attr.value)
+      printer.print(">")
+      printer.print("<source")
+      printAttribute("src", rendering.href)
+      printer.print("/>")
+      printer.print("</video>")
+    } else {
+      printer.print("<img")
+      printAttribute("src", rendering.href)
+      printAttribute("class", rendering.text)
+      for (attr: LinkRenderer.Attribute <- rendering.attributes)
+        printAttribute(attr.name, attr.value)
+      printer.print("/>")
+    }
   }
 
 
@@ -54,6 +70,7 @@ object SlideHTMLRenderer {
     try {
       val astRoot: RootNode = parser.parseMarkdown(markdown.toArray)
       val html = new SlideHTMLRenderer().toHtml(astRoot)
+      // todo - presenter notes
       // sloppy post processing for header [fit] as it barfs inside the reflinks nodes
       var output = html
       for (n <- 1 to 6) {
