@@ -1,0 +1,9 @@
+<%@ var slide:String %>
+<html>
+    <head>
+        <title>Slide Template</title>
+    </head>
+<body>
+    ${unescape(slide)}
+</body>
+</html>

@@ -1,5 +1,3 @@
-slidenumbers: true
-
 ## Building Beautiful APIs
 ###### (you've got red on you)
 ### µCon '14 

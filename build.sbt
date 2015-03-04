@@ -19,12 +19,8 @@ scalateTemplateConfig in Compile <<= (sourceDirectory in Compile){ base =>
   Seq(
     TemplateConfig(
       base / "resources" / "templates",
-      Seq(
-        "import org.scalatra.UrlGenerator"
-      ),
-      Seq(
-        Binding("context", "_root_.org.scalatra.scalate.ScalatraRenderContext", importMembers = true, isImplicit = true)
-      ),
+      Seq.empty,
+      Seq.empty,
       Some("templates")
     )
   )
