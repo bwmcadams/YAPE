@@ -76,7 +76,7 @@ bmcadams@netflix.com
 ---
 #[fit] Choose a good service model
 
-![left fit autoplay](images/majorKong.mov)
+![left fit autoplay loop](images/majorKong.mov)
 
 * Choose a service model that's easy to interact with (and develop)
 * The same goes for your data layer, and development framework

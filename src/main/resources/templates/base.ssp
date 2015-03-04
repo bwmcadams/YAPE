@@ -2,6 +2,16 @@
 <html>
     <head>
         <title>Slide Template</title>
+        <style>
+            .right {
+                float: right;
+            }
+            .left{
+                float: left;
+            }
+            img.right { padding: 4px; margin: 0 0 2px 7px; display: inline; }
+            img.left { padding: 4px; margin: 0 7px 2px 0; display: inline; }
+        </style>
     </head>
 <body>
     ${unescape(slide)}
