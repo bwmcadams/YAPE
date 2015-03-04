@@ -29,6 +29,10 @@ class SlideHTMLRenderer(_linkRenderer: LinkRenderer = new YAPELinkRenderer,
     if (rendering.href.endsWith(".webm") || rendering.href.endsWith(".mov") || rendering.href.endsWith(".mp4") ||
         rendering.href.endsWith(".mov")) {
       printer.print("<video")
+      if (rendering.text.contains("autoplay"))
+        printer.print(" autoplay")
+      if (rendering.text.contains("loop"))
+        printer.print(" loop")
       printAttribute("class", rendering.text)
       for (attr: LinkRenderer.Attribute <- rendering.attributes)
         printAttribute(attr.name, attr.value)
