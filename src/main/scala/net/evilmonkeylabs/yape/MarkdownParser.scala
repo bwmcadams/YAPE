@@ -18,7 +18,7 @@ object MarkdownParser extends App {
   val slides = lines.split("\n---")
   println(s"# of slides: ${slides.length}")
 
-  //println(PragmaParser.showSlideNumbers(line))
+  // todo - parse starting pragma for slide #s and footers
   for (slide <- slides) {
     println(SlideHTMLRenderer(slide))
     println("-------------------------------")
